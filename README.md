@@ -204,11 +204,3 @@ Start the client
 ```bash
   cd client && npm start
 ```
-
-<!-- Contact -->
-
-## :handshake: Collaborators
-
-- [Anand Amar](https://github.com/anand-2020)
-- [Divyansh Agrawal](https://github.com/divyansh67)
-- [Rahul Pathak](https://github.com/rahulpathak-github)
