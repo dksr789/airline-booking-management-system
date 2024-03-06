@@ -1,11 +1,11 @@
-const { PORT } = require("./utils/config.js");
-const Database = require("./models/database.js");
+import { PORT } from "./utils/config.js";
+import Database from "./models/database.js";
 process.on("uncaughtException", (err) => {
   console.log("UNCAUGHT EXCEPTION! Shutting down...");
   console.log(err.name, err.message);
   process.exit(1);
 });
-const app = require("./app.js");
+import app from "./app.js";
 //CONNECT TO DATABASE
 Database.init();
 
