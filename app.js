@@ -1,5 +1,6 @@
 import express from "express";
-import { resolve } from "path";
+import { resolve, dirname } from "path";
+import { fileURLToPath } from "url";
 import helmet from "helmet";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -13,6 +14,10 @@ import customerRouter from "./routes/customerRouter.js";
 import ticketRouter from "./routes/ticketRouter.js";
 import flightRouter from "./routes/flightRouter.js";
 import airportRouter from "./routes/airportRouter.js";
+
+// Get the directory name
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
 
@@ -35,7 +40,7 @@ app.use("/api/airport", airportRouter);
 
 //client/build
 if (NODE_ENV === "production") {
-  app.use(express.static(__dirname + "/client/build"));
+  app.use(express.static(resolve(__dirname, "client", "build")));
 
   app.get("*", (req, res) => {
     res.sendFile(resolve(__dirname, "client", "build", "index.html"));
