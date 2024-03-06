@@ -14,7 +14,7 @@ import { separateSqlCommands } from "./parser.js";
 class Database {
   constructor() {
     this.db = createConnection({
-      host: "localhost",
+      host: "sql6.freesqldatabase.com",
       user: MYSQL_USER,
       password: MYSQL_PASSWORD,
       database: MYSQL_DATABASE,
@@ -109,10 +109,10 @@ class Database {
     console.log("Connecting to DB...");
     await this.connect();
     console.log("Connected to DB! Importing Data...");
-    await this.importSchema();
-    await this.importData();
-    await this.importStoredObjects();
-    await this.importFlightDateData();
+    //await this.importSchema();
+    //await this.importData();
+    //await this.importStoredObjects();
+    //await this.importFlightDateData();
     console.log("Data Imported!");
   };
 }
