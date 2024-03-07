@@ -40,7 +40,7 @@ function Footer({ light }) {
                 fontWeight="medium"
                 color={light ? "white" : "dark"}
               >
-                &nbsp;Anand, Divyansh & Rahul&nbsp;
+                &nbsp;Deepak Singh&nbsp;
               </MDTypography>
             </Link>
             for petty grades.
