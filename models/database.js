@@ -1,5 +1,10 @@
 import { createConnection } from "mysql2";
-import { MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE } from "../utils/config.js";
+import {
+  MYSQL_HOST,
+  MYSQL_USER,
+  MYSQL_PASSWORD,
+  MYSQL_DATABASE,
+} from "../utils/config.js";
 import { SCHEMA } from "./schema.js";
 import { DATA } from "./data.js";
 import { FLIGHT_DATE_DATA } from "./flight_date_data.js";
@@ -17,20 +22,22 @@ class Database {
   }
 
   connect = () => {
+    var that = this;
     return new Promise((resolve, reject) => {
-      this.db
+      that.db
         .promise()
         .connect()
-        .then(() => {
+        .then((res) => {
           resolve();
         })
-        .catch((err) => reject(err));
+        .catch((err) => reject());
     });
   };
 
   executeQuery = (sqlQuery, params) => {
+    var that = this;
     return new Promise((resolve, reject) => {
-      this.db
+      that.db
         .promise()
         .query(sqlQuery, params)
         .then((res) => {
@@ -47,11 +54,11 @@ class Database {
       try {
         const sqlSchema = separateSqlCommands(SCHEMA);
         for (let i = 0; i < sqlSchema.length; i++)
-          await this.executeQuery(sqlSchema[i]);
+          await db.executeQuery(sqlSchema[i]);
 
         resolve();
       } catch (err) {
-        reject(err);
+        reject();
       }
     });
   };
@@ -61,11 +68,11 @@ class Database {
       try {
         const sqlData = separateSqlCommands(DATA);
         for (let i = 0; i < sqlData.length; i++)
-          await this.executeQuery(sqlData[i]);
+          await db.executeQuery(sqlData[i]);
 
         resolve();
       } catch (err) {
-        reject(err);
+        reject();
       }
     });
   };
@@ -75,11 +82,11 @@ class Database {
       try {
         const sqlStoredObjects = separateSqlCommands(STORED_OBJECTS);
         for (let i = 0; i < sqlStoredObjects.length; i++)
-          await this.executeQuery(sqlStoredObjects[i]);
+          await db.executeQuery(sqlStoredObjects[i]);
 
         resolve();
       } catch (err) {
-        reject(err);
+        reject();
       }
     });
   };
@@ -89,23 +96,24 @@ class Database {
       try {
         const sqlFlightDateData = separateSqlCommands(FLIGHT_DATE_DATA);
         for (let i = 0; i < sqlFlightDateData.length; i++)
-          await this.executeQuery(sqlFlightDateData[i]);
+          await db.executeQuery(sqlFlightDateData[i]);
 
         resolve();
       } catch (err) {
-        reject(err);
+        reject();
       }
     });
   };
 
   init = async () => {
     console.log("Connecting to DB...");
-    try {
-      await this.connect();
-      console.log("Connected to DB!");
-    } catch (error) {
-      console.error("Failed to connect to DB:", error);
-    }
+    await this.connect();
+    console.log("Connected to DB! Importing Data...");
+    await this.importSchema();
+    await this.importData();
+    await this.importStoredObjects();
+    await this.importFlightDateData();
+    console.log("Data Imported!");
   };
 }
 
