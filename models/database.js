@@ -107,13 +107,18 @@ class Database {
 
   init = async () => {
     console.log("Connecting to DB...");
-    await this.connect();
-    console.log("Connected to DB! Importing Data...");
-    await this.importSchema();
-    await this.importData();
-    await this.importStoredObjects();
-    await this.importFlightDateData();
-    console.log("Data Imported!");
+    try {
+      await this.connect();
+      console.log("Connected to DB! Importing Data...");
+      await this.importSchema();
+      await this.importData();
+      await this.importStoredObjects();
+      await this.importFlightDateData();
+      console.log("Data Imported!");
+    } catch (error) {
+      console.error("Error importing data:", error);
+      // Handle the error, maybe attempt a reconnection or exit the application
+    }
   };
 }
 
