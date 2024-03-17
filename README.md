@@ -1,7 +1,6 @@
 <div align="center">
 
-  <img src="client/src/assets/images/logos/logo.png" alt="logo" width="300" height="auto" />
-  <h1>Monke Airlines</h1>
+  <h1>DTM Airlines</h1>
   
   <p>
     
