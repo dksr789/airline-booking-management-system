@@ -9,7 +9,7 @@ import { separateSqlCommands } from "./parser.js";
 class Database {
   constructor() {
     this.db = createConnection({
-      host: "sql6.freesqldatabase.com",
+      host: "us-cluster-east-01.k8s.cleardb.net",
       user: MYSQL_USER,
       password: MYSQL_PASSWORD,
       database: MYSQL_DATABASE,
