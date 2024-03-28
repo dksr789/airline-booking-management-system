@@ -1,6 +1,5 @@
 import { createConnection } from "mysql2";
 import {
-  MYSQL_HOST,
   MYSQL_USER,
   MYSQL_PASSWORD,
   MYSQL_DATABASE,
@@ -22,30 +21,32 @@ class Database {
   }
 
   connect = () => {
-    var that = this;
     return new Promise((resolve, reject) => {
-      that.db
+      this.db
         .promise()
         .connect()
         .then((res) => {
           resolve();
         })
-        .catch((err) => reject());
+        .catch((err) => reject(err));
     });
   };
 
   executeQuery = (sqlQuery, params) => {
-    var that = this;
-    return new Promise((resolve, reject) => {
-      that.db
-        .promise()
-        .query(sqlQuery, params)
-        .then((res) => {
-          resolve({ data: res[0] });
-        })
-        .catch((error) => {
-          reject({ error: error.message });
-        });
+    return new Promise(async (resolve, reject) => {
+      try {
+        // Check if the connection is closed
+        if (this.db.state === 'disconnected') {
+          // Re-establish the connection
+          await this.connect();
+        }
+
+        // Execute the query
+        const result = await this.db.promise().query(sqlQuery, params);
+        resolve({ data: result[0] });
+      } catch (error) {
+        reject({ error: error.message });
+      }
     });
   };
 
@@ -54,11 +55,11 @@ class Database {
       try {
         const sqlSchema = separateSqlCommands(SCHEMA);
         for (let i = 0; i < sqlSchema.length; i++)
-          await db.executeQuery(sqlSchema[i]);
+          await this.executeQuery(sqlSchema[i]);
 
         resolve();
       } catch (err) {
-        reject();
+        reject(err);
       }
     });
   };
@@ -68,11 +69,11 @@ class Database {
       try {
         const sqlData = separateSqlCommands(DATA);
         for (let i = 0; i < sqlData.length; i++)
-          await db.executeQuery(sqlData[i]);
+          await this.executeQuery(sqlData[i]);
 
         resolve();
       } catch (err) {
-        reject();
+        reject(err);
       }
     });
   };
@@ -82,11 +83,11 @@ class Database {
       try {
         const sqlStoredObjects = separateSqlCommands(STORED_OBJECTS);
         for (let i = 0; i < sqlStoredObjects.length; i++)
-          await db.executeQuery(sqlStoredObjects[i]);
+          await this.executeQuery(sqlStoredObjects[i]);
 
         resolve();
       } catch (err) {
-        reject();
+        reject(err);
       }
     });
   };
@@ -96,11 +97,11 @@ class Database {
       try {
         const sqlFlightDateData = separateSqlCommands(FLIGHT_DATE_DATA);
         for (let i = 0; i < sqlFlightDateData.length; i++)
-          await db.executeQuery(sqlFlightDateData[i]);
+          await this.executeQuery(sqlFlightDateData[i]);
 
         resolve();
       } catch (err) {
-        reject();
+        reject(err);
       }
     });
   };
