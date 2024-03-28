@@ -111,7 +111,7 @@ class Database {
     await this.connect();
     console.log("Connected to DB! Importing Data...");
     //await this.importSchema();
-    await this.importData();
+    //await this.importData();
     //await this.importStoredObjects();
     //await this.importFlightDateData();
     console.log("Data Imported!");
